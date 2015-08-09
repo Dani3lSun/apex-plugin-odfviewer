@@ -27,7 +27,7 @@ BEGIN
   -- set variables
   l_region_id := apex_escape.html_attribute(p_region.static_id || '_odf');
   --
-  -- add div for timeline
+  -- add div for webodf
   sys.htp.p('<div id="' || l_region_id || '"></div>');
   --
   -- add webodf js
