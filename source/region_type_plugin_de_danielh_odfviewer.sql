@@ -148,7 +148,7 @@ wwv_flow_api.create_plugin(
 'Original from: https://github.com/kogmbh/WebODF',
 'Github Plugin: https://github.com/Dani3lSun/apex-plugin-odfviewer'))
 ,p_version_identifier=>'1.0'
-,p_about_url=>'http://blog.danielh.de/'
+,p_about_url=>'https://github.com/Dani3lSun/apex-plugin-odfviewer'
 ,p_files_version=>220
 );
 wwv_flow_api.create_plugin_attribute(
