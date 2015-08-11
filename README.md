@@ -11,12 +11,14 @@ It is based on JS Framework webodf.js (https://github.com/kogmbh/WebODF).
 - (Optional) Deploy the CSS/JS files from "server" directory on your webserver and change the "File Prefix" to webservers folder.
 
 ##Plugin Settings
-- single row SQL Query that returns a BLOB value
+- SQL Query that returns a BLOB value and the filename as text
 - Select the BLOB column (Content should be a ODF compatible file, all other kind of files doesn´t work)
+- Select the filename column (should contain the whole filename incl. file ending)
 
 ####Example SQL Query:
 ```language-sql
-SELECT content (BLOB)
+SELECT content, (BLOB)
+       filename (varchar2)
   FROM file_table
  WHERE id = :P10_FILE_ID
 ```
