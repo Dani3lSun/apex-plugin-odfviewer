@@ -14,6 +14,7 @@ It is based on JS Framework webodf.js (https://github.com/kogmbh/WebODF).
 - SQL Query that returns a BLOB value and the filename as text
 - Select the BLOB column (Content should be a ODF compatible file, all other kind of files doesn´t work)
 - Select the filename column (should contain the whole filename incl. file ending)
+- Error Text when filetype is not a ODF file
 
 ####Example SQL Query:
 ```language-sql
