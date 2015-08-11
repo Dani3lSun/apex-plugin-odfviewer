@@ -69,6 +69,12 @@ wwv_flow_api.create_plugin(
 '  -- set variables',
 '  l_region_id := apex_escape.html_attribute(p_region.static_id || ''_odf'');',
 '  --',
+'  -- add webodf js',
+'  apex_javascript.add_library(p_name           => ''webodf'',',
+'                              p_directory      => p_plugin.file_prefix,',
+'                              p_version        => NULL,',
+'                              p_skip_extension => FALSE);',
+'  --',
 '  -- Get Data from Source',
 '  l_column_value_list := apex_plugin_util.get_data2(p_sql_statement  => p_region.source,',
 '                                                    p_min_columns    => 2,',
@@ -106,16 +112,6 @@ wwv_flow_api.create_plugin(
 '                       ''odp'',',
 '                       ''odg'',',
 '                       ''odf'') THEN',
-'    --',
-'    -- add webodf and data2blob(conversion Data-URI to BLOB) js',
-'    apex_javascript.add_library(p_name           => ''webodf'',',
-'                                p_directory      => p_plugin.file_prefix,',
-'                                p_version        => NULL,',
-'                                p_skip_extension => FALSE);',
-'    apex_javascript.add_library(p_name           => ''data2blob'',',
-'                                p_directory      => p_plugin.file_prefix,',
-'                                p_version        => NULL,',
-'                                p_skip_extension => FALSE);',
 '    -- set correct mimetype for data-uri',
 '    IF l_file_ending = ''odt'' THEN',
 '      l_mime_type := ''application/vnd.oasis.opendocument.text'';',
@@ -153,14 +149,9 @@ wwv_flow_api.create_plugin(
 '                       l_region_id || ''"),'';',
 '    l_inline_string := l_inline_string ||',
 '                       ''odfcanvas = new odf.OdfCanvas(odfelement);'';',
-'    l_inline_string := l_inline_string || chr(10) || ''var dataURL = "data:'' ||',
-'                       l_mime_type || '';base64,'' || l_clob_base64 || ''";'' ||',
-'                       chr(10);',
-'    l_inline_string := l_inline_string ||',
-'                       ''var dataBLOB = dataURItoBlob(dataURL);'' || chr(10);',
-'    l_inline_string := l_inline_string ||',
-'                       ''odfcanvas.load(window.URL.createObjectURL(dataBLOB)) }'' ||',
-'                       chr(10);',
+'    l_inline_string := l_inline_string || chr(10) ||',
+'                       ''odfcanvas.load("data:'' || l_mime_type || '';base64,'' ||',
+'                       l_clob_base64 || ''"); '' || chr(10) || ''}'' || chr(10);',
 '    l_inline_string := l_inline_string || ''</script>'';',
 '    --',
 '    -- split clob into 32k varchar2 parts (can be very big) and write to http',
@@ -178,8 +169,8 @@ wwv_flow_api.create_plugin(
 '    END LOOP;',
 '    -- call the webodf function onload',
 '    apex_javascript.add_onload_code(p_code => ''init_odf()'');',
-'  ELSE',
 '    -- if wrong filetype, print div with err msg',
+'  ELSE',
 '    --',
 '    -- add div for err msg',
 '    sys.htp.p(''<div id="'' || l_region_id || ''"><p>'' || l_err_text_column ||',
@@ -206,7 +197,7 @@ wwv_flow_api.create_plugin(
 'Github Plugin: https://github.com/Dani3lSun/apex-plugin-odfviewer'))
 ,p_version_identifier=>'1.0'
 ,p_about_url=>'https://github.com/Dani3lSun/apex-plugin-odfviewer'
-,p_files_version=>221
+,p_files_version=>220
 );
 wwv_flow_api.create_plugin_attribute(
  p_id=>wwv_flow_api.id(11236995062103474554)
@@ -4645,28 +4636,6 @@ wwv_flow_api.create_plugin_file(
  p_id=>wwv_flow_api.id(11236957512078442602)
 ,p_plugin_id=>wwv_flow_api.id(11236870643453424656)
 ,p_file_name=>'webodf.js'
-,p_mime_type=>'text/javascript'
-,p_file_charset=>'utf-8'
-,p_file_content=>wwv_flow_api.varchar2_to_blob(wwv_flow_api.g_varchar2_table)
-);
-end;
-/
-begin
-wwv_flow_api.g_varchar2_table := wwv_flow_api.empty_varchar2_table;
-wwv_flow_api.g_varchar2_table(1) := '66756E6374696F6E2064617461555249746F426C6F62286461746155524929207B0A20202020696628747970656F66206461746155524920213D3D2027737472696E6727297B0A20202020202020207468726F77206E6577204572726F722827496E7661';
-wwv_flow_api.g_varchar2_table(2) := '6C696420617267756D656E743A2064617461555249206D757374206265206120737472696E6727293B0A202020207D0A2020202064617461555249203D20646174615552492E73706C697428272C27293B0A202020207661722074797065203D20646174';
-wwv_flow_api.g_varchar2_table(3) := '615552495B305D2E73706C697428273A27295B315D2E73706C697428273B27295B305D2C0A202020202020202062797465537472696E67203D2061746F6228646174615552495B315D292C0A202020202020202062797465537472696E674C656E677468';
-wwv_flow_api.g_varchar2_table(4) := '203D2062797465537472696E672E6C656E6774682C0A20202020202020206172726179427566666572203D206E65772041727261794275666665722862797465537472696E674C656E677468292C0A2020202020202020696E744172726179203D206E65';
-wwv_flow_api.g_varchar2_table(5) := '772055696E74384172726179286172726179427566666572293B0A20202020666F7220287661722069203D20303B2069203C2062797465537472696E674C656E6774683B20692B2B29207B0A2020202020202020696E7441727261795B695D203D206279';
-wwv_flow_api.g_varchar2_table(6) := '7465537472696E672E63686172436F646541742869293B0A202020207D0A2020202072657475726E206E657720426C6F62285B696E7441727261795D2C207B0A2020202020202020747970653A20747970650A202020207D293B0A7D';
-null;
-end;
-/
-begin
-wwv_flow_api.create_plugin_file(
- p_id=>wwv_flow_api.id(11328517676826136972)
-,p_plugin_id=>wwv_flow_api.id(11236870643453424656)
-,p_file_name=>'data2blob.js'
 ,p_mime_type=>'text/javascript'
 ,p_file_charset=>'utf-8'
 ,p_file_content=>wwv_flow_api.varchar2_to_blob(wwv_flow_api.g_varchar2_table)

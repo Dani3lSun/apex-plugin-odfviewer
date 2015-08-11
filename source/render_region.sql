@@ -33,6 +33,12 @@ BEGIN
   -- set variables
   l_region_id := apex_escape.html_attribute(p_region.static_id || '_odf');
   --
+  -- add webodf js
+  apex_javascript.add_library(p_name           => 'webodf',
+                              p_directory      => p_plugin.file_prefix,
+                              p_version        => NULL,
+                              p_skip_extension => FALSE);
+  --
   -- Get Data from Source
   l_column_value_list := apex_plugin_util.get_data2(p_sql_statement  => p_region.source,
                                                     p_min_columns    => 2,
@@ -70,16 +76,6 @@ BEGIN
                        'odp',
                        'odg',
                        'odf') THEN
-    --
-    -- add webodf and data2blob(conversion Data-URI to BLOB) js
-    apex_javascript.add_library(p_name           => 'webodf',
-                                p_directory      => p_plugin.file_prefix,
-                                p_version        => NULL,
-                                p_skip_extension => FALSE);
-    apex_javascript.add_library(p_name           => 'data2blob',
-                                p_directory      => p_plugin.file_prefix,
-                                p_version        => NULL,
-                                p_skip_extension => FALSE);
     -- set correct mimetype for data-uri
     IF l_file_ending = 'odt' THEN
       l_mime_type := 'application/vnd.oasis.opendocument.text';
@@ -117,14 +113,9 @@ BEGIN
                        l_region_id || '"),';
     l_inline_string := l_inline_string ||
                        'odfcanvas = new odf.OdfCanvas(odfelement);';
-    l_inline_string := l_inline_string || chr(10) || 'var dataURL = "data:' ||
-                       l_mime_type || ';base64,' || l_clob_base64 || '";' ||
-                       chr(10);
-    l_inline_string := l_inline_string ||
-                       'var dataBLOB = dataURItoBlob(dataURL);' || chr(10);
-    l_inline_string := l_inline_string ||
-                       'odfcanvas.load(window.URL.createObjectURL(dataBLOB)) }' ||
-                       chr(10);
+    l_inline_string := l_inline_string || chr(10) ||
+                       'odfcanvas.load("data:' || l_mime_type || ';base64,' ||
+                       l_clob_base64 || '"); ' || chr(10) || '}' || chr(10);
     l_inline_string := l_inline_string || '</script>';
     --
     -- split clob into 32k varchar2 parts (can be very big) and write to http
@@ -142,8 +133,8 @@ BEGIN
     END LOOP;
     -- call the webodf function onload
     apex_javascript.add_onload_code(p_code => 'init_odf()');
-  ELSE
     -- if wrong filetype, print div with err msg
+  ELSE
     --
     -- add div for err msg
     sys.htp.p('<div id="' || l_region_id || '"><p>' || l_err_text_column ||
