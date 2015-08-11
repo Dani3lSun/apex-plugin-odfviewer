@@ -70,7 +70,7 @@ BEGIN
                                           -1) + 1)),
                        'xxx');
   --
-  -- render only when correct filetype
+  -- render only when correct filetypes
   IF l_file_ending IN ('ods',
                        'odt',
                        'odp',
@@ -138,7 +138,7 @@ BEGIN
     --
     -- add div for err msg
     sys.htp.p('<div id="' || l_region_id || '"><p>' || l_err_text_column ||
-              '</div>');
+              '</p></div>');
   END IF;
   --
   RETURN NULL;
