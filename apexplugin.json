@@ -27,7 +27,8 @@
       "plugin" : {
         "internal-name" : "DE.DANIELH.ODFVIEWER",
         "type" : "region",
-        "demo" : "https://apex.oracle.com/pls/apex/f?p=57743:10"
+        "demo" : "https://apex.oracle.com/pls/apex/f?p=57743:10",
+        "preview-img" : "https://github.com/Dani3lSun/apex-plugin-odfviewer/blob/master/preview.png"
       }
     }
   }
