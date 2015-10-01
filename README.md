@@ -4,7 +4,7 @@ It is based on JS Framework webodf.js (https://github.com/kogmbh/WebODF).
 
 
 ##Changelog
-####1.0 - Initial Release
+####Beta - In development
 
 ##Install
 - Import plugin file "region_type_plugin_de_danielh_odfviewer.sql" from source directory into your application
