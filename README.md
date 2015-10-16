@@ -1,4 +1,4 @@
-#Oracle Apex Region Plugin - ODF Viewer
+#Oracle APEX Region Plugin - ODF Viewer
 ODF Viewer is a region type plugin that allows you to display ODF files like spreadsheets(.ods) or documents(.odt) with a single sql query.
 It is based on JS Framework webodf.js (https://github.com/kogmbh/WebODF).
 
