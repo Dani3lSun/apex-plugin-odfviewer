@@ -24,7 +24,7 @@ SELECT content, (BLOB)
  WHERE id = :P10_FILE_ID
 ```
 ## Demo Application
-https://apex.oracle.com/pls/apex/f?p=57743:10
+https://apex.oracle.com/pls/apex/f?p=APEXPLUGIN
 
 ## Preview
 ![](https://github.com/Dani3lSun/apex-plugin-odfviewer/blob/master/preview.png)
